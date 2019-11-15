@@ -148,6 +148,9 @@ namespace GK {
 
 		public void Break(Ray ray, float holeRadius)
 		{
+			bool randomizeRotation = false;
+			float randAngleOffset = 0;
+
 			//find contact point
 			Plane plane = new Plane(transform.forward, transform.position);
 			float distance;
@@ -202,7 +205,7 @@ namespace GK {
 
 			//find the vertices of the ellipse
 			List<Vector2> vertices = new List<Vector2>();
-			float randAngleOffset = Random.value;
+			if (randomizeRotation) randAngleOffset = Random.value;
 			for (int i = 0; i < shatterResolution; i++)
 			{
 				float t = (float)i / (float)shatterResolution;
@@ -233,18 +236,18 @@ namespace GK {
 			}
 
 			//add some outer sites to really shatter the whole piece
-			randAngleOffset = Random.value;
+			if(randomizeRotation) randAngleOffset = Random.value;
 			for (int i = 0; i < shatterResolution / 2; i++)
 			{
 				float t = (float)i / (float)(shatterResolution / 2);
-				var angle = (randAngleOffset + t) * 2.0f * Mathf.PI;
+				var angle = (randAngleOffset + t) * 2.0f * Mathf.PI + 0.1f;
 				var dist = holeRadius * 3;
 
 				sites.Add(new Vector2(
 						dist * Mathf.Cos(angle) * tiltExpansion,
 						dist * Mathf.Sin(angle)));
 			}
-			randAngleOffset = Random.value;
+			if (randomizeRotation) randAngleOffset = Random.value;
 			for (int i = 0; i < shatterResolution / 2; i++)
 			{
 				float t = (float)i / (float)(shatterResolution / 2);
@@ -257,7 +260,7 @@ namespace GK {
 			}
 
 			//combine the non-generated sites and generated sites lists
-			int sitesToNotGenerate = innerSites.Count;
+			int sitesToNotGenerate = Input.GetKey(KeyCode.LeftAlt) ? 0 : innerSites.Count;
 			innerSites.AddRange(sites);
 			sites = innerSites;
 			innerSites = null;

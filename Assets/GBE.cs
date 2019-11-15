@@ -141,7 +141,9 @@ public class GBE : MonoBehaviour
 
 		_beamTargets = new List<GK.BreakableByGBE>();
 		_beamRay = new Ray(cam.position, cam.forward);
-		
+
+		System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+
 		foreach (var hit in hits)
 		{
 			GK.BreakableByGBE breaker = hit.collider.GetComponent<GK.BreakableByGBE>();
