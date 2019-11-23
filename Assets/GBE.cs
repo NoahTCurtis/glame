@@ -57,6 +57,7 @@ public class GBE : MonoBehaviour
 	bool JUST_SHOOT_ALREADY = true; //cheatcode lol
 	void Update()
 	{
+		//find charge level
 		float secondsItTakesToCharge = 1.75f;
 		if(Input.GetMouseButton(1))
 		{
@@ -68,13 +69,25 @@ public class GBE : MonoBehaviour
 		}
 		charge = Mathf.Clamp(charge, 0, 8);
 
+		//animate the gun
 		OpenRail01(Mathf.Clamp01(charge - 4));
 		FillUIBars();
 		
-		float minRadius = 0.5f;
-		float maxRadius = 2.0f;
-		_beamRadius = Mathf.Lerp(minRadius, maxRadius, charge);
+		//find the shot radius at this charge level
+		switch((int)Mathf.Floor(charge))
+		{
+			case 0: _beamRadius = 0.5f; break;
+			case 1: _beamRadius = 2.0f; break;
+			case 2: _beamRadius = 4.0f; break;
+			case 3: _beamRadius = 8.0f; break;
+			case 4: _beamRadius = 16.0f; break;
+			case 5: _beamRadius = 16.0f; break;
+			case 6: _beamRadius = 16.0f; break;
+			case 7: _beamRadius = 16.0f; break;
+			case 8: _beamRadius = 16.0f; break;
+		}
 
+		//shoot, if possible
 		if(Input.GetMouseButtonDown(0) && (charge > 1 || JUST_SHOOT_ALREADY))
 		{
 			Shoot();

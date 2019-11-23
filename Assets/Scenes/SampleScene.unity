@@ -49759,17 +49759,17 @@ PrefabInstance:
     - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: RoomCountX
-      value: 50
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: RoomCountY
-      value: 1
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: RoomCountZ
-      value: 50
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
