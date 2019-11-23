@@ -173,6 +173,20 @@ namespace GK {
 			holeRotation = (Mathf.PI / 2.0f) - holeRotation;
 			GameObject.DestroyImmediate(obj);
 
+			//find how many sites will be generated (number is higher for bigger holes)
+
+			//use the Ramanujan approximation of the ellipse's circumference
+			float a = 2.0f * holeRadius;
+			float b = a * tiltExpansion;
+			float h = ((a - b) * (a - b)) / ((a + b) * (a + b));
+			float h3 = 3.0f * h;
+			float perimeter = Mathf.PI * (a + b) * (1 + (h3 / (10.0f + Mathf.Sqrt(4.0f - h3))));
+
+			int resolutionFromCircumference = (int)Mathf.Floor(perimeter / (Mathf.PI * 1.5f));
+			int shatterResolution = Mathf.Max(resolutionFromCircumference, 9);
+
+
+
 			//find angle to rotate the hole so the ellipse lines up correctly
 			//V||P = P × (V×P / |P|) / |P| = Px(VxP)?
 			//V:vector, P:normal of plane
@@ -195,7 +209,6 @@ namespace GK {
 			var calc = new VoronoiCalculator();
 			var clip = new VoronoiClipper();
 
-			int shatterResolution = 14;
 			var innerSites = new List<Vector2>();
 			var sites = new List<Vector2>();
 
