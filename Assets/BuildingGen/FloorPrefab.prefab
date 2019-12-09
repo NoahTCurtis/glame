@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 8854687847810278331}
   - component: {fileID: 8854687847810278276}
   - component: {fileID: 8854687847810278277}
+  - component: {fileID: 7144426007999502441}
   m_Layer: 0
-  m_Name: WallPrefab (2)
+  m_Name: FloorPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,6 +108,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PolygonPoints: []
-  Thickness: 1
-  MinBreakArea: 0.01
-  MinImpactToBreak: 50
+--- !u!114 &7144426007999502441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8854687847810278279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541cadae23f9e16419a8b73a8fb04950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParentsToAdd: []

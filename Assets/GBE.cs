@@ -65,9 +65,9 @@ public class GBE : MonoBehaviour
 		}
 		else
 		{
-			charge -= Time.deltaTime / secondsItTakesToCharge;
+			charge -= Time.deltaTime / (secondsItTakesToCharge * 2.0f);
 		}
-		charge = Mathf.Clamp(charge, 0, 8);
+		charge = Mathf.Clamp(charge, 0, 6);
 
 		//animate the gun
 		OpenRail01(Mathf.Clamp01(charge - 4));
@@ -82,9 +82,6 @@ public class GBE : MonoBehaviour
 			case 3: _beamRadius = 8.0f; break;
 			case 4: _beamRadius = 16.0f; break;
 			case 5: _beamRadius = 16.0f; break;
-			case 6: _beamRadius = 16.0f; break;
-			case 7: _beamRadius = 16.0f; break;
-			case 8: _beamRadius = 16.0f; break;
 		}
 
 		//shoot, if possible
@@ -96,14 +93,17 @@ public class GBE : MonoBehaviour
 
 	void FillUIBars()
 	{
-		barN.SetFill01( Mathf.Clamp(charge, 0, 1) - 0.0f);
-		barE.SetFill01( Mathf.Clamp(charge, 1, 2) - 1.0f);
-		barS.SetFill01( Mathf.Clamp(charge, 2, 3) - 2.0f);
-		barW.SetFill01( Mathf.Clamp(charge, 3, 4) - 3.0f);
-		barNE.SetFill01(Mathf.Clamp(charge, 4, 5) - 4.0f);
-		barSE.SetFill01(Mathf.Clamp(charge, 5, 6) - 5.0f);
-		barSW.SetFill01(Mathf.Clamp(charge, 6, 7) - 6.0f);
-		barNW.SetFill01(Mathf.Clamp(charge, 7, 8) - 7.0f);
+		barN.SetFill01(charge > 5 ? 0 : Mathf.Clamp(charge, 0, 1) - 0.0f);
+		barE.SetFill01(charge > 5 ? 0 : Mathf.Clamp(charge, 1, 2) - 1.0f);
+		barS.SetFill01(charge > 5 ? 0 : Mathf.Clamp(charge, 2, 3) - 2.0f);
+		barW.SetFill01(charge > 5 ? 0 : Mathf.Clamp(charge, 3, 4) - 3.0f);
+
+		centerCircle.SetFill01( Mathf.Clamp(charge, 4, 5) - 4.0f);
+
+		barNE.SetFill01(charge > 5 ? 1 : 0);
+		barSE.SetFill01(charge > 5 ? 1 : 0);
+		barSW.SetFill01(charge > 5 ? 1 : 0);
+		barNW.SetFill01(charge > 5 ? 1 : 0);
 	}
 
 	void Shoot() //All shooting stuff happens in the lifetime of this function

@@ -3,26 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace GK {
-	public delegate void BreakEvent(BreakableByGBE other);
 
 	public class BreakableByGBE : MonoBehaviour
 	{
-		public event BreakEvent OnBreakEvent;
-
 		public MeshFilter Filter     { get; private set; }
 		public MeshRenderer Renderer { get; private set; }
 		public MeshCollider Collider { get; private set; }
 		public Rigidbody Rigidbody   { get; private set; }
 
+		private StructurePiece _structurePiece;
+
 		public List<Vector2> PolygonPoints;
 		private float Thickness = 1.0f;
 		private float MinBreakArea = 0.01f;
 
-		public List<BreakableByGBE> ParentsToAdd;
-		protected Dictionary<BreakableByGBE, bool> Parents = new Dictionary<BreakableByGBE, bool>();
-		protected Dictionary<BreakableByGBE, bool> Children = new Dictionary<BreakableByGBE, bool>();
 		protected Vector3 originalScale; //used for UVs
-
 
 		float? _Area = null;
 		public float Area {
@@ -38,61 +33,12 @@ namespace GK {
 		void Start()
 		{
 			Reload();
-
-			foreach (var parent in ParentsToAdd)
-				AddSupport(this, parent);
+			_structurePiece = GetComponent<StructurePiece>();
 		}
 
 		private void OnDestroy()
 		{
-			SendBreakEvent();
-		}
-
-		public static void AddSupport(BreakableByGBE child, BreakableByGBE parent)
-		{
-			if (child == null || parent == null) return;
-			if (child?.GetComponent<Rigidbody>() != null || parent?.GetComponent<Rigidbody>() != null) return;
-
-			parent.Children.Add(child, true);
-			child.Parents.Add(parent, true);
-			parent.OnBreakEvent += child.OnParentBroken;
-			child.OnBreakEvent += parent.OnChildBroken;
-
-			//Debug.Log("BBGBE: " + child.name + " supports " + parent.name);
-		}
-
-		public void OnParentBroken(BreakableByGBE parent)
-		{
-			Debug.Assert(Parents.ContainsKey(parent), "Child didn't know about parent");
-			//Debug.Log("BBGBE: " + name + "'s parent (" + parent.name + ") broke");
-
-			this.OnBreakEvent -= parent.OnChildBroken;
-			parent.OnBreakEvent -= this.OnParentBroken;
-			Parents.Remove(parent);
-
-		}
-
-		public void OnChildBroken(BreakableByGBE child)
-		{
-			Debug.Assert(Children.ContainsKey(child), "Parent didn't know about child");
-			//Debug.Log("BBGBE: " + name + "'s child (" + child.name + ") broke");
-
-			this.OnBreakEvent -= child.OnParentBroken;
-			child.OnBreakEvent -= this.OnChildBroken;
-			Children.Remove(child);
-
-			if (Children.Count == 0 && GetComponent<Rigidbody>() == null)
-			{
-				Debug.Log("BBGBE: " + name + " has no more supports");
-				gameObject.AddComponent<Rigidbody>();
-				SendBreakEvent();
-			}
-		}
-
-		private void SendBreakEvent()
-		{
-			//Debug.Log("BBGBE: " + name + " broke");
-			OnBreakEvent?.Invoke(this);
+			
 		}
 
 		public void Reload()
@@ -184,7 +130,8 @@ namespace GK {
 
 			int resolutionFromCircumference = (int)Mathf.Floor(perimeter / (Mathf.PI * 1.5f));
 			int shatterResolution = Mathf.Max(resolutionFromCircumference, 9);
-
+			//Debug.Log("shatterRes: " + shatterResolution);
+			shatterResolution = Mathf.Min(shatterResolution, 100);
 
 
 			//find angle to rotate the hole so the ellipse lines up correctly
