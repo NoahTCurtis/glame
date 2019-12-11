@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GK {
 
-	public class BreakableByGBE : MonoBehaviour
+	public class Breakable_Flat : BreakableByGBE
 	{
 		public MeshFilter Filter     { get; private set; }
 		public MeshRenderer Renderer { get; private set; }
@@ -41,7 +41,7 @@ namespace GK {
 			
 		}
 
-		public void Reload()
+		public void Reload() //TODO: this assumes the piece is a rectangle, so we should fix that
 		{
 			if (Filter == null) Filter = GetComponent<MeshFilter>();
 			if (Renderer == null) Renderer = GetComponent<MeshRenderer>();
@@ -71,12 +71,6 @@ namespace GK {
 			Collider.sharedMesh = mesh;
 		}
 
-		void Update() {
-			if (transform.position.y < -1000.0f) {
-				Destroy(gameObject);
-			}
-		}
-
 		static float NormalizedRandom(float mean, float stddev) {
 			var u1 = UnityEngine.Random.value;
 			var u2 = UnityEngine.Random.value;
@@ -87,32 +81,30 @@ namespace GK {
 			return mean + stddev * randStdNormal;
 		}
 
-		public void Break(Vector3 position, float holeRadius)
+		public override void Break(GBE.BeamData beam)
 		{
-			Break((Vector2)transform.InverseTransformPoint(position), holeRadius);
-		}
+			bool randomizeRotation = true;
+			bool randomizeColor = Input.GetKey(KeyCode.LeftControl);
+			bool addRigidbody = !Input.GetKey(KeyCode.LeftShift);
 
-		public void Break(Ray ray, float holeRadius)
-		{
-			bool randomizeRotation = false;
 			float randAngleOffset = 0;
 
 			//find contact point
 			Plane plane = new Plane(transform.forward, transform.position);
 			float distance;
-			if (plane.Raycast(ray, out distance) == false) return; //quit on coplanar ray
-			Vector2 position = transform.InverseTransformPoint(ray.GetPoint(distance)); //center of the beam's hole
+			if (plane.Raycast(beam.ray, out distance) == false) return; //quit on coplanar ray
+			Vector2 position = transform.InverseTransformPoint(beam.ray.GetPoint(distance)); //center of the beam's hole
 
 			//find angles between ray and plane
 			//float tiltAngle = (Mathf.PI / 2.0f) - Mathf.Acos(Mathf.Abs(Vector3.Dot(ray.direction, plane.normal) / (ray.direction.magnitude * plane.normal.magnitude)));
-			float tiltAngle = (Mathf.PI / 2.0f) - Mathf.Acos(Mathf.Abs(Vector3.Dot(ray.direction, plane.normal))); //assume ray direction and plane normal are normalized
+			float tiltAngle = (Mathf.PI / 2.0f) - Mathf.Acos(Mathf.Abs(Vector3.Dot(beam.ray.direction, plane.normal))); //assume ray direction and plane normal are normalized
 			float tiltExpansion = 1.0f + Mathf.Min(Mathf.Abs(Mathf.Tan(tiltAngle + Mathf.PI / 2.0f)), 99.0f);
 			tiltExpansion = Mathf.Max(1.0f, tiltExpansion);
 			tiltExpansion = 1.0f + (tiltExpansion - 1.0f) / 2.0f; //this line tries to reduce the expansion by 50% but it feels sloppy.
 
 			//find hole rotation angle using the dumbest hack of all time
 			GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-			obj.transform.LookAt(obj.transform.position + plane.normal, ray.direction);
+			obj.transform.LookAt(obj.transform.position + plane.normal, beam.ray.direction);
 			obj.transform.localScale = Vector3.one;
 			obj.transform.SetParent(transform, true);
 			float holeRotation = obj.transform.localRotation.eulerAngles.z * Mathf.Deg2Rad;
@@ -122,7 +114,7 @@ namespace GK {
 			//find how many sites will be generated (number is higher for bigger holes)
 
 			//use the Ramanujan approximation of the ellipse's circumference
-			float a = 2.0f * holeRadius;
+			float a = 2.0f * beam.radius;
 			float b = a * tiltExpansion;
 			float h = ((a - b) * (a - b)) / ((a + b) * (a + b));
 			float h3 = 3.0f * h;
@@ -170,7 +162,7 @@ namespace GK {
 			{
 				float t = (float)i / (float)shatterResolution;
 				var angle = (randAngleOffset + t) * 2.0f * Mathf.PI;
-				var dist = holeRadius;
+				var dist = beam.radius;
 
 				vertices.Add( new Vector2(
 						dist * Mathf.Cos(angle) * tiltExpansion,
@@ -201,7 +193,7 @@ namespace GK {
 			{
 				float t = (float)i / (float)(shatterResolution / 2);
 				var angle = (randAngleOffset + t) * 2.0f * Mathf.PI + 0.1f;
-				var dist = holeRadius * 3;
+				var dist = beam.radius * 3;
 
 				sites.Add(new Vector2(
 						dist * Mathf.Cos(angle) * tiltExpansion,
@@ -212,7 +204,7 @@ namespace GK {
 			{
 				float t = (float)i / (float)(shatterResolution / 2);
 				var angle = (randAngleOffset + t) * 2.0f * Mathf.PI;
-				var dist = holeRadius * 8;
+				var dist = beam.radius * 8;
 
 				sites.Add(new Vector2(
 						dist * Mathf.Cos(angle) * tiltExpansion,
@@ -270,7 +262,7 @@ namespace GK {
 					newGo.transform.localPosition = transform.localPosition;
 					newGo.transform.localRotation = transform.localRotation;
 
-					var bs = newGo.GetComponent<BreakableByGBE>();
+					var bs = newGo.GetComponent<Breakable_Flat>();
 
 					bs.Thickness = Thickness;
 					bs.PolygonPoints.Clear();
@@ -281,25 +273,31 @@ namespace GK {
 
 					//should it be a rigidbody?
 					Rigidbody = GetComponent<Rigidbody>();
+					Rigidbody newRB = null;
 					if (Rigidbody != null)
 					{
 						//new thing already has rigidbody because this one did
-						var rb = bs.GetComponent<Rigidbody>();
-						rb.mass = Rigidbody.mass * (childArea / area);
-						rb.velocity = Rigidbody.velocity;
-						rb.angularVelocity = Rigidbody.angularVelocity;
+						newRB = bs.GetComponent<Rigidbody>();
+						newRB.mass = Rigidbody.mass * (childArea / area);
+						newRB.velocity = Rigidbody.velocity;
+						newRB.angularVelocity = Rigidbody.angularVelocity;
 					}
 					else
 					{
-						bool addRigidbody = !Input.GetKey(KeyCode.LeftShift);
 						if (addRigidbody)
 						{
-							var rb = newGo.AddComponent<Rigidbody>();
+							newRB = newGo.AddComponent<Rigidbody>();
 						}
 					}
 
+					//the rigidbody shouldnt move until the GBE says go
+					if (newRB != null)
+						newRB.isKinematic = true;
+
+					//add the piece to the beam's debris list
+					beam.AddNewDebrisPiece(newGo);
+
 					//make this piece a random color
-					bool randomizeColor = Input.GetKey(KeyCode.LeftControl);
 					if(randomizeColor)
 					{
 						newGo.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);

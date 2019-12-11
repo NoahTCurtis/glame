@@ -4,6 +4,37 @@ using UnityEngine;
 
 public class GBE : MonoBehaviour
 {
+	public class BeamData
+	{
+		public BeamData(Ray ray, float radius)
+		{
+			this.ray = ray;
+			this.radius = radius;
+
+			targets = new List<BreakableByGBE>();
+			newDebrisPieces = new List<GameObject>();
+		}
+
+		public void AddTarget(BreakableByGBE target)
+		{
+			targets.Add(target);
+		}
+
+		public void AddNewDebrisPiece(GameObject piece)
+		{
+			newDebrisPieces.Add(piece);
+		}
+		
+		public Ray ray;
+		public float radius;
+		public List<BreakableByGBE> targets;
+		public List<GameObject> newDebrisPieces;
+
+		public int targetsBrokenSoFar = 0;
+	}
+
+
+	#region refs
 	[Header("Rail Pieces")]
 	public Transform Rail1;
 	public Transform Rail2;
@@ -38,17 +69,23 @@ public class GBE : MonoBehaviour
 	[Header("Other Pieces")]
 	public Transform Handle;
 	public Transform Trigger;
+	#endregion
 
+	//Singleton pattern
+	public static GBE instance = null;
+
+	//GBE animation data
 	public float charge = 0.0f;
 
 	//current shot data
-	private List<GK.BreakableByGBE> _beamTargets;
-	private Ray _beamRay;
-	private float _beamRadius;
+	private BeamData _beam;
+	public bool ShotInProgress { get => _beam != null; }
+	public bool Charging { get => charge > 0.0f; }
 
 	// Start is called before the first frame update
 	void Start()
 	{
+		instance = this;
 		Beam.transform.localScale = Vector3.zero;
 		Beam.transform.localPosition = Vector3.zero;
 	}
@@ -59,33 +96,23 @@ public class GBE : MonoBehaviour
 	{
 		//find charge level
 		float secondsItTakesToCharge = 1.75f;
-		if(Input.GetMouseButton(1))
+		float secondsItTakesToUncharge = 0.75f;
+		if (Input.GetMouseButton(1))
 		{
 			charge += Time.deltaTime / secondsItTakesToCharge;
 		}
 		else
 		{
-			charge -= Time.deltaTime / (secondsItTakesToCharge * 2.0f);
+			charge -= Time.deltaTime / secondsItTakesToUncharge;
 		}
 		charge = Mathf.Clamp(charge, 0, 6);
 
 		//animate the gun
 		OpenRail01(Mathf.Clamp01(charge - 4));
 		FillUIBars();
-		
-		//find the shot radius at this charge level
-		switch((int)Mathf.Floor(charge))
-		{
-			case 0: _beamRadius = 0.5f; break;
-			case 1: _beamRadius = 2.0f; break;
-			case 2: _beamRadius = 4.0f; break;
-			case 3: _beamRadius = 8.0f; break;
-			case 4: _beamRadius = 16.0f; break;
-			case 5: _beamRadius = 16.0f; break;
-		}
 
 		//shoot, if possible
-		if(Input.GetMouseButtonDown(0) && (charge > 1 || JUST_SHOOT_ALREADY))
+		if(Input.GetMouseButtonDown(0) && !ShotInProgress && (charge > 1 || JUST_SHOOT_ALREADY))
 		{
 			Shoot();
 		}
@@ -106,15 +133,6 @@ public class GBE : MonoBehaviour
 		barNW.SetFill01(charge > 5 ? 1 : 0);
 	}
 
-	void Shoot() //All shooting stuff happens in the lifetime of this function
-	{
-		StartCoroutine(EmitBeam());
-		CollectBeamTargets();
-		StartCoroutine(BreakBeamTargets());
-
-		charge = 0;
-	}
-
 	void OpenRail01(float value)
 	{
 		float t = value * 0.5f;
@@ -124,16 +142,101 @@ public class GBE : MonoBehaviour
 		Rail4.localPosition = new Vector3(0, +1.0f, -1.0f) * t;
 	}
 
-	private IEnumerator EmitBeam()
+	void Shoot() //All shooting stuff happens in the lifetime of this function
+	{
+		//find the shot radius at this charge level
+		float beamRadius = 0;
+		switch ((int)Mathf.Floor(charge))
+		{
+			case 0: beamRadius = 0.5f; break;
+			case 1: beamRadius = 2.0f; break;
+			case 2: beamRadius = 4.0f; break;
+			case 3: beamRadius = 8.0f; break;
+			case 4: beamRadius = 16.0f; break;
+			case 5: beamRadius = 16.0f; break;
+		}
+
+		//create beam data
+		Transform cam = Camera.main.transform;
+		Ray beamRay = new Ray(cam.position, cam.forward);
+		_beam = new BeamData(beamRay, beamRadius);
+
+		//shot pipeline
+		CollectBeamTargets(_beam);
+
+		IEnumerator enablePhysicsOnDebris = EnablePhysicsOnDebris(_beam, EndShot());
+		IEnumerator breakBeamTargets = BreakBeamTargets(_beam, enablePhysicsOnDebris);
+
+		StartCoroutine(breakBeamTargets);
+
+		//animation
+		StartCoroutine(EmitBeam(_beam));
+
+		charge = 0;
+	}
+
+	void CollectBeamTargets(BeamData beam)
+	{
+		Transform cam = Camera.main.transform;
+		var hits = Physics.SphereCastAll(cam.position, beam.radius, cam.forward);
+
+		System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+
+		foreach (var hit in hits)
+		{
+			BreakableByGBE breaker = hit.collider.GetComponent<BreakableByGBE>();
+			if (breaker != null)
+			{
+				beam.targets.Add(breaker);
+			}
+		}
+	}
+
+	private IEnumerator EndShot()
+	{
+		_beam = null;
+		yield return null;
+	}
+
+	/*
+	private IEnumerator EmitBeam(BeamData beam, IEnumerator next = null)
+	{
+		float length = 10.0f;
+		while (beam.targetsBrokenSoFar < beam.targets.Count)
+		{
+			float t = (float)beam.targetsBrokenSoFar / (float)beam.targets.Count;
+			float diameter = beam.radius * 2.0f * (1.0f - t);
+			Beam.localPosition = new Vector3(length, 0, 0);
+			Beam.localScale = new Vector3(diameter, length, diameter);
+			yield return null;
+		}
+
+		//reset for next time
+		Beam.transform.localScale = Vector3.zero;
+		Beam.transform.localPosition = Vector3.zero;
+
+		if (next != null) StartCoroutine(next);
+	}
+
+	/*/
+
+	private IEnumerator EmitBeam(BeamData beam, IEnumerator next = null)
 	{
 		float startTime = Time.time;
 		float endTime = Time.time + 0.25f;
-		float startRadius = _beamRadius;
+		float startRadius = beam.radius;
 
 		float length = 10.0f;
-		while (Time.time <= endTime)
+		float t = 0;
+		while (t < 1)
 		{
-			float t = Mathf.InverseLerp(startTime, endTime, Time.time);
+			float timeT = Mathf.InverseLerp(startTime, endTime, Time.time);
+			float breakT = 1;
+			if(beam != null)
+				breakT = (float)beam.targetsBrokenSoFar / (float)beam.targets.Count;
+			t = Mathf.Min(timeT, breakT);
+			Debug.Log(t + " (" + beam?.targetsBrokenSoFar + "/" + beam?.targets.Count + ") [time" + timeT + " / break" + breakT + "]");
+
 			float diameter = startRadius * 2.0f * (1.0f - t);
 			Beam.localPosition = new Vector3(length, 0, 0);
 			Beam.localScale = new Vector3(diameter, length, diameter);
@@ -144,40 +247,19 @@ public class GBE : MonoBehaviour
 		Beam.transform.localScale = Vector3.zero;
 		Beam.transform.localPosition = Vector3.zero;
 
-		yield break;
+		if (next != null) StartCoroutine(next);
 	}
+	//*/
 
-	void CollectBeamTargets()
+	IEnumerator BreakBeamTargets(BeamData beam, IEnumerator next = null)
 	{
-		Transform cam = Camera.main.transform;
-		var hits = Physics.SphereCastAll(cam.position, _beamRadius, cam.forward);
-
-		_beamTargets = new List<GK.BreakableByGBE>();
-		_beamRay = new Ray(cam.position, cam.forward);
-
-		System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
-
-		foreach (var hit in hits)
-		{
-			GK.BreakableByGBE breaker = hit.collider.GetComponent<GK.BreakableByGBE>();
-			if (breaker != null)
-			{
-				_beamTargets.Add(breaker);
-			}
-		}
-	}
-
-	IEnumerator BreakBeamTargets()
-	{
-		Ray ray = _beamRay;
-		float radius = _beamRadius;
-
-		int maxBreaksPerFrame = 16;
+		int maxBreaksPerFrame = 5;
 		int brokenOnThisFrame = 0;
-		foreach(var breaker in _beamTargets)
+		foreach(var breaker in beam.targets)
 		{
-			breaker.Break(ray, radius);
+			breaker.Break(beam);
 			brokenOnThisFrame += 1;
+			beam.targetsBrokenSoFar += 1;
 
 			if(brokenOnThisFrame >= maxBreaksPerFrame)
 			{
@@ -185,5 +267,21 @@ public class GBE : MonoBehaviour
 				brokenOnThisFrame = 0;
 			}
 		}
+
+		if (next != null) StartCoroutine(next);
+	}
+
+	IEnumerator EnablePhysicsOnDebris(BeamData beam, IEnumerator next = null)
+	{
+		foreach(var debris in beam.newDebrisPieces)
+		{
+			Rigidbody rb = debris.GetComponent<Rigidbody>();
+			if (rb != null)
+				rb.isKinematic = false;
+		}
+
+		yield return null;
+
+		if (next != null) StartCoroutine(next);
 	}
 }

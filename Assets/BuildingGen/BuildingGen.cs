@@ -131,7 +131,7 @@ public class BuildingGen : MonoBehaviour
 		{
 			for (int z = 0; z < roomRefs.Count; z++)
 			{
-				for (int y = 0; y < roomRefs[z].Count; y++)
+				for (int y = 1; y < roomRefs[z].Count; y++)
 				{
 					for (int x = 0; x < roomRefs[z][y].Count; x++)
 					{
@@ -139,7 +139,10 @@ public class BuildingGen : MonoBehaviour
 
 						var thisRoom = roomRefs[z][y][x];
 						var roomBelow = roomRefs[z][y-1][x];
-						Debug.Log("[" + x + "," + y + "," + z + "] (" + thisRoom.Count + " pieces)");
+						if(roomBelow.Count == 0 && y > 1)
+							roomBelow = roomRefs[z][y - 2][x];
+
+						//Debug.Log("[" + x + "," + y + "," + z + "] (" + thisRoom.Count + " pieces)");
 
 						foreach(var pieceAbove in thisRoom)
 						{
