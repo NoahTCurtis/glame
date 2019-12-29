@@ -136,10 +136,10 @@ public class GBE : MonoBehaviour
 	void OpenRail01(float value)
 	{
 		float t = value * 0.5f;
-		Rail1.localPosition = new Vector3(0, +1.0f, +1.0f) * t;
-		Rail2.localPosition = new Vector3(0, -1.0f, +1.0f) * t;
-		Rail3.localPosition = new Vector3(0, -1.0f, -1.0f) * t;
-		Rail4.localPosition = new Vector3(0, +1.0f, -1.0f) * t;
+		Rail1.localPosition = Vector3.Lerp(new Vector3(0, -0.23f, -0.23f), new Vector3(0, +1.0f, +1.0f), t);
+		Rail2.localPosition = Vector3.Lerp(new Vector3(0, +0.23f, -0.23f), new Vector3(0, -1.0f, +1.0f), t);
+		Rail3.localPosition = Vector3.Lerp(new Vector3(0, +0.23f, +0.23f), new Vector3(0, -1.0f, -1.0f), t);
+		Rail4.localPosition = Vector3.Lerp(new Vector3(0, -0.23f, +0.23f), new Vector3(0, +1.0f, -1.0f), t);
 	}
 
 	void Shoot() //All shooting stuff happens in the lifetime of this function
@@ -148,12 +148,13 @@ public class GBE : MonoBehaviour
 		float beamRadius = 0;
 		switch ((int)Mathf.Floor(charge))
 		{
-			case 0: beamRadius = 0.5f; break;
-			case 1: beamRadius = 2.0f; break;
-			case 2: beamRadius = 4.0f; break;
-			case 3: beamRadius = 8.0f; break;
-			case 4: beamRadius = 16.0f; break;
-			case 5: beamRadius = 16.0f; break;
+			case 0: beamRadius = 0.5f; break; //no bars
+			case 1: beamRadius = 1.0f; break; //1 bar
+			case 2: beamRadius = 2.0f; break; //2 bars
+			case 3: beamRadius = 4.0f; break; //3 bars
+			case 4: beamRadius = 8.0f; break; //4 bars
+			case 5: beamRadius = 16.0f; break;//X shot
+			case 6: beamRadius = 16.0f; break;//X shot again
 		}
 
 		//create beam data

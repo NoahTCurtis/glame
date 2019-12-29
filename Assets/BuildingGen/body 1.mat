@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: body
+  m_Shader: {fileID: 4800000, guid: c16fababd49df4bb2980522a6d4dfd83, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ColorBase:
+        m_Texture: {fileID: 2800000, guid: 8301a2796eba1423ba471fb2b41ca6f9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 390f662a31691442bb2c4383ad472a1c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tone0Sampler:
+        m_Texture: {fileID: 2800000, guid: 01d19e64cf79347bc878027364cb5441, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tone1Sampler:
+        m_Texture: {fileID: 2800000, guid: 84f887166fa184a03a9f7a16a5934908, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tone2Sampler:
+        m_Texture: {fileID: 2800000, guid: 70bf952db2b7341ab8ae07a305499ec5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tone3Sampler:
+        m_Texture: {fileID: 2800000, guid: 778ef21ffd0224c58ab5c8c3ffee4e79, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _InkSize: 5.27
+    - _ToneBlend: 18.4
+    - _ToneSize: 1.73
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _InkColor: {r: 0.43283582, g: 0.43283582, b: 0.43283582, a: 1}
