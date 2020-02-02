@@ -334,7 +334,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4222260
 Transform:
   m_ObjectHideFlags: 0
@@ -5765,6 +5765,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: InstantBuilding (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountX
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountY
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountZ
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: StructureCanCollapse
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801836, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5819,26 +5839,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountX
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountY
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountZ
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: StructureCanCollapse
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab33ef104412d7441a3cff95ead3e5b3, type: 3}
@@ -8120,6 +8120,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: InstantBuilding (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountY
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountZ
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: StructureCanCollapse
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801836, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8174,26 +8194,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountX
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountY
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountZ
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: StructureCanCollapse
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab33ef104412d7441a3cff95ead3e5b3, type: 3}
@@ -20840,6 +20840,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: InstantBuilding (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountX
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountY
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountZ
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: StructureCanCollapse
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: PiecesPerFrame
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801836, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20894,31 +20919,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountX
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountY
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountZ
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: StructureCanCollapse
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: PiecesPerFrame
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab33ef104412d7441a3cff95ead3e5b3, type: 3}
@@ -21342,11 +21342,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 830599022}
     m_Modifications:
-    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
-        type: 3}
-      propertyPath: m_Name
-      value: Exterminator Rigged (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 6765700913446452636, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21401,6 +21396,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
+        type: 3}
+      propertyPath: m_Name
+      value: Exterminator Rigged (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8148097167861581298, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
@@ -41001,11 +41001,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 830599022}
     m_Modifications:
-    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
-        type: 3}
-      propertyPath: m_Name
-      value: Exterminator Rigged
-      objectReference: {fileID: 0}
     - target: {fileID: 6765700913446452636, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -41060,6 +41055,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
+        type: 3}
+      propertyPath: m_Name
+      value: Exterminator Rigged
       objectReference: {fileID: 0}
     - target: {fileID: 8148097167861581298, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
@@ -56986,7 +56986,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1160362161
 Transform:
   m_ObjectHideFlags: 0
@@ -70542,11 +70542,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 830599022}
     m_Modifications:
-    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
-        type: 3}
-      propertyPath: m_Name
-      value: Exterminator Rigged (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 6765700913446452636, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -70601,6 +70596,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
+        type: 3}
+      propertyPath: m_Name
+      value: Exterminator Rigged (4)
       objectReference: {fileID: 0}
     - target: {fileID: 8148097167861581298, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
@@ -76357,8 +76357,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -83579,6 +83577,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: InstantBuilding (Big)
       objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountX
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountY
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountZ
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: PiecesPerFrame
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: PressBToActivate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: StructureCanCollapse
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801836, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -83632,36 +83660,6 @@ PrefabInstance:
     - target: {fileID: 7126790524185801836, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountX
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountY
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountZ
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: PiecesPerFrame
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: PressBToActivate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: StructureCanCollapse
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -89918,11 +89916,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 830599022}
     m_Modifications:
-    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
-        type: 3}
-      propertyPath: m_Name
-      value: Exterminator Rigged (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 6765700913446452636, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -89977,6 +89970,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
+        type: 3}
+      propertyPath: m_Name
+      value: Exterminator Rigged (2)
       objectReference: {fileID: 0}
     - target: {fileID: 8148097167861581298, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
@@ -103005,11 +103003,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 830599022}
     m_Modifications:
-    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
-        type: 3}
-      propertyPath: m_Name
-      value: Exterminator Rigged (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 6765700913446452636, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -103064,6 +103057,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7764136465219719055, guid: 1189b1fe73b19a2438ee0dc661239f53,
+        type: 3}
+      propertyPath: m_Name
+      value: Exterminator Rigged (3)
       objectReference: {fileID: 0}
     - target: {fileID: 8148097167861581298, guid: 1189b1fe73b19a2438ee0dc661239f53,
         type: 3}
@@ -104614,6 +104612,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: InstantBuilding
       objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountX
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountY
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: RoomCountZ
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
+        type: 3}
+      propertyPath: StructureCanCollapse
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7126790524185801836, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -104667,26 +104685,6 @@ PrefabInstance:
     - target: {fileID: 7126790524185801836, guid: ab33ef104412d7441a3cff95ead3e5b3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountX
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountY
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: RoomCountZ
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7126790524185801833, guid: ab33ef104412d7441a3cff95ead3e5b3,
-        type: 3}
-      propertyPath: StructureCanCollapse
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

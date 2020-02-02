@@ -34,7 +34,7 @@ public class GBE : MonoBehaviour
 	}
 
 
-	#region refs
+	#region GameObjectReferences
 	[Header("Rail Pieces")]
 	public Transform Rail1;
 	public Transform Rail2;

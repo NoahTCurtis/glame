@@ -11,6 +11,8 @@ namespace GK {
 		public MeshCollider Collider { get; private set; }
 		public Rigidbody Rigidbody   { get; private set; }
 
+		public bool DebrisPhysics = true;
+
 		private StructurePiece _structurePiece;
 
 		public List<Vector2> PolygonPoints;
@@ -284,7 +286,7 @@ namespace GK {
 					}
 					else
 					{
-						if (addRigidbody)
+						if (DebrisPhysics && addRigidbody)
 						{
 							newRB = newGo.AddComponent<Rigidbody>();
 						}
