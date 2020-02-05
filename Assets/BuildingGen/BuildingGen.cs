@@ -8,6 +8,11 @@ public class BuildingGen : MonoBehaviour
 	public int RoomCountX;
 	public int RoomCountY;
 	public int RoomCountZ;
+
+	public bool GenerateXPieces = true;
+	public bool GenerateYPieces = true;
+	public bool GenerateZPieces = true;
+
 	public int PiecesPerFrame = 1;
 	public bool PressBToActivate = false;
 	public bool StructureCanCollapse = false;
@@ -80,7 +85,7 @@ public class BuildingGen : MonoBehaviour
 					internalPiece = depth > 0;
 					randomNotHoles = Random.Range(0, 2) != 0;
 
-					if (shapeCorrect && (!internalPiece || randomNotHoles))
+					if (GenerateXPieces && shapeCorrect && (!internalPiece || randomNotHoles))
 					{
 						GameObject wallX = GameObject.Instantiate(WallPrefab, transform);
 						wallX.transform.localRotation = deg90y;
@@ -96,7 +101,7 @@ public class BuildingGen : MonoBehaviour
 					internalPiece = depth > 0;
 					randomNotHoles = Random.Range(0, 6) != 0;
 
-					if (shapeCorrect && (!internalPiece || randomNotHoles))
+					if (GenerateYPieces && shapeCorrect && (!internalPiece || randomNotHoles))
 					{
 						GameObject floor = GameObject.Instantiate(FloorPrefab, transform);
 						floor.transform.localRotation = deg90x;
@@ -112,7 +117,7 @@ public class BuildingGen : MonoBehaviour
 					internalPiece = depth > 0;
 					randomNotHoles = Random.Range(0, 2) != 0;
 
-					if (shapeCorrect && (!internalPiece || randomNotHoles))
+					if (GenerateZPieces && shapeCorrect && (!internalPiece || randomNotHoles))
 					{
 						GameObject wallZ = GameObject.Instantiate(WallPrefab, transform);
 						wallZ.transform.localRotation = Quaternion.identity;
@@ -196,5 +201,25 @@ public class BuildingGen : MonoBehaviour
 			return true;
 		}
 		else return false;
+	}
+
+	void OnDrawGizmos()
+	{
+		//find size
+		float wallLength = WallPrefab.transform.localScale.x;
+		float wallThickness = WallPrefab.transform.localScale.z;
+		float wallHeight = WallPrefab.transform.localScale.y;
+		float floorThickness = FloorPrefab.transform.localScale.z;
+		Vector3 scale = Vector3.zero;
+		scale.x = RoomCountX * wallLength + (RoomCountX - 1) * wallThickness;
+		scale.y = RoomCountY * wallHeight + (RoomCountY - 1) * floorThickness;
+		scale.z = RoomCountZ * wallLength + (RoomCountZ - 1) * wallThickness;
+
+		Vector3 center = transform.rotation * scale / 2.0f;
+
+		Gizmos.matrix = Matrix4x4.TRS(transform.position + center, transform.rotation, scale);
+		Gizmos.color = new Color(1, 0, 0, 0.5f);
+		Gizmos.DrawCube(Vector3.zero, Vector3.one);
+		Gizmos.matrix = Matrix4x4.identity;
 	}
 }

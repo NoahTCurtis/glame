@@ -69,6 +69,9 @@ public class GBE : MonoBehaviour
 	[Header("Other Pieces")]
 	public Transform Handle;
 	public Transform Trigger;
+
+	[Header("VFX")]
+	public List<ParticleSystem> Particles;
 	#endregion
 
 	//Singleton pattern
@@ -108,14 +111,25 @@ public class GBE : MonoBehaviour
 		charge = Mathf.Clamp(charge, 0, 6);
 
 		//animate the gun
-		OpenRail01(Mathf.Clamp01(charge - 4));
+		float openness01 = Mathf.Clamp01(charge - 4);
+		OpenRail01(openness01);
 		FillUIBars();
+		GunShake01(openness01);
 
 		//shoot, if possible
 		if(Input.GetMouseButtonDown(0) && !ShotInProgress && (charge > 1 || JUST_SHOOT_ALREADY))
 		{
 			Shoot();
 		}
+	}
+
+	void OpenRail01(float value)
+	{
+		float t = value * 0.5f;
+		Rail1.localPosition = Vector3.Lerp(new Vector3(0, -0.23f, -0.23f), new Vector3(0, +1.0f, +1.0f), t);
+		Rail2.localPosition = Vector3.Lerp(new Vector3(0, +0.23f, -0.23f), new Vector3(0, -1.0f, +1.0f), t);
+		Rail3.localPosition = Vector3.Lerp(new Vector3(0, +0.23f, +0.23f), new Vector3(0, -1.0f, -1.0f), t);
+		Rail4.localPosition = Vector3.Lerp(new Vector3(0, -0.23f, +0.23f), new Vector3(0, +1.0f, -1.0f), t);
 	}
 
 	void FillUIBars()
@@ -133,13 +147,18 @@ public class GBE : MonoBehaviour
 		barNW.SetFill01(charge > 5 ? 1 : 0);
 	}
 
-	void OpenRail01(float value)
+	void GunShake01(float value)
 	{
-		float t = value * 0.5f;
-		Rail1.localPosition = Vector3.Lerp(new Vector3(0, -0.23f, -0.23f), new Vector3(0, +1.0f, +1.0f), t);
-		Rail2.localPosition = Vector3.Lerp(new Vector3(0, +0.23f, -0.23f), new Vector3(0, -1.0f, +1.0f), t);
-		Rail3.localPosition = Vector3.Lerp(new Vector3(0, +0.23f, +0.23f), new Vector3(0, -1.0f, -1.0f), t);
-		Rail4.localPosition = Vector3.Lerp(new Vector3(0, -0.23f, +0.23f), new Vector3(0, +1.0f, -1.0f), t);
+		float shakeLateral = 0.0015f;
+		float y = Random.Range(-shakeLateral, shakeLateral);
+		float z = Random.Range(-shakeLateral, shakeLateral);
+		transform.localPosition = new Vector3(transform.localPosition.x, y, z) * value;
+
+		foreach(var ps in Particles)
+		{
+			var emission = ps.emission;
+			emission.rateOverTime = (int)(1000.0f * value * value * value);
+		}
 	}
 
 	void Shoot() //All shooting stuff happens in the lifetime of this function
@@ -164,7 +183,7 @@ public class GBE : MonoBehaviour
 
 		//shot pipeline
 		CollectBeamTargets(_beam);
-
+		
 		IEnumerator enablePhysicsOnDebris = EnablePhysicsOnDebris(_beam, EndShot());
 		IEnumerator breakBeamTargets = BreakBeamTargets(_beam, enablePhysicsOnDebris);
 
