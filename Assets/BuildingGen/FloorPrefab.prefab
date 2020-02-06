@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9a2db045076f25e4d9c744c4b29babab, type: 2}
+  - {fileID: 2100000, guid: 52c9083b299dfa3479caa56bb9f0a98c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896b4f624e15f1f4abd57fb9923c0333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebrisPhysics: 1
   PolygonPoints: []
 --- !u!114 &7144426007999502441
 MonoBehaviour:
