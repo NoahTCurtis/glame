@@ -11,6 +11,7 @@ public class SplashControl : MonoBehaviour
 	public GameObject blame;
 	public GameObject text1;
 	public GameObject text2;
+	public GameObject text3;
 
 	public Image FillBar;
 	private float charge = 0;
@@ -22,6 +23,7 @@ public class SplashControl : MonoBehaviour
 		blame.SetActive(true);
 		text1.SetActive(true);
 		text2.SetActive(true);
+		text3.SetActive(true);
 		StartCoroutine(introAnim());
 	}
 	
@@ -34,8 +36,13 @@ public class SplashControl : MonoBehaviour
 		yield return new WaitForSeconds(7);
 		blame.SetActive(false);
 
+		yield return new WaitForSeconds(0.5f);
 		while (Input.anyKeyDown == false) yield return null;
 		text1.SetActive(false);
+
+		yield return new WaitForSeconds(0.5f);
+		while (Input.anyKeyDown == false) yield return null;
+		text2.SetActive(false);
 
 		while (true)
 		{
