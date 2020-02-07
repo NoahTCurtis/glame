@@ -13,6 +13,11 @@ public class SplashControl : MonoBehaviour
 	public GameObject text2;
 	public GameObject text3;
 
+	public AudioSource audioSource;
+	public AudioClip endClip;
+
+	public RectTransform beamImage;
+
 	public Image FillBar;
 	private float charge = 0;
 
@@ -66,6 +71,26 @@ public class SplashControl : MonoBehaviour
 
 			yield return null;
 		}
+
+		text3.SetActive(false);
+
+		audioSource.Stop();
+		audioSource.clip = endClip;
+		audioSource.Play();
+
+		beamImage.sizeDelta = Vector2.one * Mathf.Max(Screen.width, Screen.height);
+
+		float startTime = Time.unscaledTime;
+		float duration = 1;
+		for (float t = startTime; t < startTime + duration; t = Time.unscaledTime)
+		{
+			float T = Mathf.InverseLerp(startTime, startTime + duration, t);
+			beamImage.sizeDelta = Vector2.one * Mathf.Max(Screen.width, Screen.height) * (1.0f - T);
+			yield return null;
+		}
+		beamImage.gameObject.SetActive(false);
+
+		yield return new WaitForSeconds(audioSource.clip.length - duration);
 
 		SceneManager.LoadScene("TestScenePlsIgnore", LoadSceneMode.Single);
 	}
