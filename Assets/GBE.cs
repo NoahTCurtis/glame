@@ -94,7 +94,7 @@ public class GBE : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	bool JUST_SHOOT_ALREADY = true; //cheatcode lol
+	bool JUST_SHOOT_ALREADY = false; //cheatcode lol
 	void Update()
 	{
 		//find charge level
