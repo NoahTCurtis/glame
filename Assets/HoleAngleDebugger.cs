@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class HoleAngleDebugger : MonoBehaviour
 {
+	public GameObject Prefab;
 	GameObject obj = null;
 	
 	void Update()
 	{
 		if(Input.GetMouseButtonDown(2))
 		{
-			obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+			if(Prefab != null)
+				obj = GameObject.Instantiate(Prefab);
+			else
+				obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
 			obj.GetComponent<Collider>().enabled = false;
 		}
 		if(Input.GetMouseButton(2))
