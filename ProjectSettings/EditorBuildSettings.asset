@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Splash/Splash.unity
     guid: cfbdbb26061a3ed4fb15bafdfabfc5be
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestScenePlsIgnore.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Darkness.unity
+    guid: 9e8eb81d9f5060443a9945f73101f189
   m_configObjects: {}
