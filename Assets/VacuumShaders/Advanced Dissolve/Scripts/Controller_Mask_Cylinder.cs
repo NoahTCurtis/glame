@@ -19,7 +19,7 @@ namespace AdvancedDissolve_Example
 
 		[Space(10)]
 		public bool invert;
-		
+		public bool local;
 
 		void Start()
 		{
@@ -100,7 +100,7 @@ namespace AdvancedDissolve_Example
 					if (materials[i] == null)
 						continue;
 
-					materials[i].SetFloat("_DissolveMaskSpace", 1);
+					materials[i].SetFloat("_DissolveMaskSpace", local ? 1 : 0);
 					materials[i].SetFloat("_DissolveMaskInvert", invert ? 1 : -1);
 
 					switch (maskID)

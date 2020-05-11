@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class GBE : MonoBehaviour
 {
 	public class BeamData
@@ -10,9 +11,6 @@ public class GBE : MonoBehaviour
 		{
 			this.ray = ray;
 			this.radius = radius;
-
-			targets = new List<BreakableByGBE>();
-			newDebrisPieces = new List<GameObject>();
 		}
 
 		public void AddTarget(BreakableByGBE target)
@@ -27,8 +25,9 @@ public class GBE : MonoBehaviour
 		
 		public Ray ray;
 		public float radius;
-		public List<BreakableByGBE> targets;
-		public List<GameObject> newDebrisPieces;
+		public List<BreakableByGBE> targets = new List<BreakableByGBE>();
+		public List<GameObject> newDebrisPieces = new List<GameObject>();
+		public List<DissolveBeam> dissolveBeams = new List<DissolveBeam>();
 
 		public int targetsBrokenSoFar = 0;
 	}
@@ -77,6 +76,9 @@ public class GBE : MonoBehaviour
 	//Singleton pattern
 	public static GBE instance = null;
 
+	//component references
+	private AudioSource _audioSource;
+
 	//GBE animation data
 	public float charge = 0.0f;
 
@@ -84,6 +86,11 @@ public class GBE : MonoBehaviour
 	private BeamData _beam;
 	public bool ShotInProgress { get => _beam != null; }
 	public bool Charging { get => charge > 0.0f; }
+
+	void Awake()
+	{
+		_audioSource = GetComponent<AudioSource>();
+	}
 
 	// Start is called before the first frame update
 	void Start()
@@ -204,10 +211,19 @@ public class GBE : MonoBehaviour
 
 		foreach (var hit in hits)
 		{
+			//remember it so they can all be broken later
 			BreakableByGBE breaker = hit.collider.GetComponent<BreakableByGBE>();
 			if (breaker != null)
 			{
 				beam.targets.Add(breaker);
+			}
+
+			//make the piece appear broken via shaders
+			var dissolveBeam = hit.collider.GetComponent<DissolveBeam>();
+			if (dissolveBeam != null)
+			{
+				dissolveBeam.AddBeam(beam);
+				beam.dissolveBeams.Add(dissolveBeam);
 			}
 		}
 	}
@@ -255,7 +271,7 @@ public class GBE : MonoBehaviour
 			if(beam != null)
 				breakT = (float)beam.targetsBrokenSoFar / (float)beam.targets.Count;
 			t = Mathf.Min(timeT, breakT);
-			Debug.Log(t + " (" + beam?.targetsBrokenSoFar + "/" + beam?.targets.Count + ") [time" + timeT + " / break" + breakT + "]");
+			//Debug.Log(t + " (" + beam?.targetsBrokenSoFar + "/" + beam?.targets.Count + ") [time" + timeT + " / break" + breakT + "]");
 
 			float diameter = startRadius * 2.0f * (1.0f - t);
 			Beam.localPosition = new Vector3(length, 0, 0);
@@ -277,7 +293,7 @@ public class GBE : MonoBehaviour
 		int brokenOnThisFrame = 0;
 		foreach(var breaker in beam.targets)
 		{
-			breaker.Break(beam);
+			//breaker.Break(beam);
 			brokenOnThisFrame += 1;
 			beam.targetsBrokenSoFar += 1;
 

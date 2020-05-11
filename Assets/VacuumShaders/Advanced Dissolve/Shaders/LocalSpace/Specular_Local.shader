@@ -34,9 +34,9 @@
 		[HideInInspector]                                                                   _DissolveMaskInvert("Invert", Float) = 1
 		[HideInInspector][KeywordEnum(One, Two, Three, Four)]                               _DissolveMaskCount("Count", Float) = 0
 	
-		[HideInInspector]  _DissolveMaskPosition("", Vector) = (0,0,0,0)
-		[HideInInspector]  _DissolveMaskNormal("", Vector) = (1,0,0,0)
-		[HideInInspector]  _DissolveMaskRadius("", Float) = 1
+		/*[HideInInspector]*/  _DissolveMaskPosition("MaskPosition", Vector) = (0,0,0,0)
+		/*[HideInInspector]*/  _DissolveMaskNormal("MaskNormal", Vector) = (1,0,0,0)
+		/*[HideInInspector]*/  _DissolveMaskRadius("MaskRadius", Float) = 1
 
 		//Alpha Source
 		[HideInInspector] [KeywordEnum(Main Map Alpha, Custom Map, Two Custom Maps, Three Custom Maps)] _DissolveAlphaSource("Alpha Source", Float) = 0

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8854687847810278276}
   - component: {fileID: 8854687847810278277}
   - component: {fileID: 7144426007999502441}
+  - component: {fileID: 3720007414111909101}
   m_Layer: 0
   m_Name: FloorPrefab
   m_TagString: Untagged
@@ -122,3 +123,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ParentsToAdd: []
+--- !u!114 &3720007414111909101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8854687847810278279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf76807cb1649df4680751578d68f6a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mat: {fileID: 2100000, guid: 9a2db045076f25e4d9c744c4b29babab, type: 2}
