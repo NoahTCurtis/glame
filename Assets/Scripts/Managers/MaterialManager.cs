@@ -34,17 +34,18 @@ public class MaterialManager : Manager
 
 	public Material GetDissolveMaterial(Material mat)
 	{
-		if (_lookupDissolveShader.ContainsKey(mat))
-		{
-			return _lookupDissolveShader[mat];
-		}
+		//if (_lookupDissolveShader.ContainsKey(mat))
+		//{
+		//	return _lookupDissolveShader[mat];
+		//}
 		/*else if(_lookupStandardShader.ContainsKey(mat))
 		{
 			return mat; //Looks like it's already a dissolve mat
 		}*/
-		else
+		//else
 		{
 			Material dissolveMat = new Material(mat);
+			dissolveMat.name = mat.name + " (dissolve)";
 			_lookupDissolveShader.Add(mat, dissolveMat);
 
 			dissolveMat.shader = dissolveShader;

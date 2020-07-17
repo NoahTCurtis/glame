@@ -29,11 +29,15 @@ public class DissolveBeam : MonoBehaviour
 	private void SetDissolveMaterial()
 	{
 		var renderer = GetComponent<Renderer>();
+
+		Debug.Log($"{gameObject.name} has {renderer.materials.Length} material(s)");
 		for (int i = 0; i < renderer.materials.Length; i++)
 		{
 			var newMat = Game.Manager<MaterialManager>().GetDissolveMaterial(renderer.materials[i]);
+			Debug.Log($"Material \"{renderer.materials[i].name}\" shall be replaced with \"{newMat.name}\"");
 			Debug.Assert(renderer.materials[i] != newMat);
-			renderer.materials[i] = newMat;
+			renderer.material = newMat;
+			Debug.Log($"Material is now \"{renderer.material.name}\"");
 		}
 	}
 
