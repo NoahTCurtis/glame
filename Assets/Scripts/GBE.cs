@@ -293,7 +293,7 @@ public class GBE : MonoBehaviour
 		int brokenOnThisFrame = 0;
 		foreach(var breaker in beam.targets)
 		{
-			//breaker.Break(beam);
+			breaker.Break(beam);
 			brokenOnThisFrame += 1;
 			beam.targetsBrokenSoFar += 1;
 

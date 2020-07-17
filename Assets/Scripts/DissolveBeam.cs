@@ -13,9 +13,7 @@ public class DissolveBeam : MonoBehaviour
 		public float height = 5;
 	}
 
-	public Material mat;
-	private List<Material> materials = new List<Material>();
-
+	private Renderer _renderer;
 	private List<CylinderParameters> cylinders = new List<CylinderParameters>();
 
 	private bool invert = false;
@@ -23,20 +21,39 @@ public class DissolveBeam : MonoBehaviour
 
 	void Start()
 	{
+		_renderer = GetComponent<Renderer>();
 		UpdateMaskKeyword();
 		UpdateMaskCountKeyword(1); //TODO: make this take zero as valid arg
+	}
 
-		//fill out materials list
-		//materials.Add(mat);
-		foreach(var material in GetComponent<Renderer>().materials)
+	private void SetDissolveMaterial()
+	{
+		var renderer = GetComponent<Renderer>();
+		for (int i = 0; i < renderer.materials.Length; i++)
 		{
-			materials.Add(material);
+			var newMat = Game.Manager<MaterialManager>().GetDissolveMaterial(renderer.materials[i]);
+			Debug.Assert(renderer.materials[i] != newMat);
+			renderer.materials[i] = newMat;
+		}
+	}
+
+	private void SetStandardMaterial()
+	{
+		var renderer = GetComponent<Renderer>();
+		for (int i = 0; i < renderer.materials.Length; i++)
+		{
+			var newMat = Game.Manager<MaterialManager>().GetStandardMaterial(renderer.materials[i]);
+			Debug.Assert(renderer.materials[i] != newMat);
+			renderer.materials[i] = newMat;
 		}
 	}
 
 	public void AddBeam(GBE.BeamData beam)
 	{
 		if (cylinders.Count >= 4) return;
+
+		Debug.Log($"{gameObject.name} added dissolve beam");
+		SetDissolveMaterial();
 
 		CylinderParameters cp = new CylinderParameters();
 		cylinders.Add(cp);
@@ -64,43 +81,44 @@ public class DissolveBeam : MonoBehaviour
 		float radius = cylinder.radius;
 		float height = cylinder.height;
 
-		for (int i = 0; i < materials.Count; i++)
+		
+		for (int i = 0; i < _renderer.materials.Length; i++)
 		{
-			Debug.Log($"DissolveBeam.Addbeam(): Updating material {materials[i].name}. (Mask ID {maskID})");
+			//Debug.Log($"DissolveBeam.Addbeam(): Updating material {_renderer.materials[i].name}. (Mask ID {maskID})");
 
-			Debug.Assert(materials[i] != null, "DissolveBeam tried to update a null material");
+			Debug.Assert(_renderer.materials[i] != null, "DissolveBeam tried to update a null material");
 
-			materials[i].SetFloat("_DissolveMaskSpace", local ? 1 : 0);
-			materials[i].SetFloat("_DissolveMaskInvert", invert ? 1 : -1);
+			_renderer.materials[i].SetFloat("_DissolveMaskSpace", local ? 1 : 0);
+			_renderer.materials[i].SetFloat("_DissolveMaskInvert", invert ? 1 : -1);
 
 			switch (maskID)
 			{
 				case 1:
-					materials[i].SetVector("_DissolveMaskPosition", position);
-					materials[i].SetVector("_DissolveMaskNormal", normal);
-					materials[i].SetFloat("_DissolveMaskRadius", radius);
-					materials[i].SetFloat("_DissolveMaskHeight", height);
+					_renderer.materials[i].SetVector("_DissolveMaskPosition", position);
+					_renderer.materials[i].SetVector("_DissolveMaskNormal", normal);
+					_renderer.materials[i].SetFloat("_DissolveMaskRadius", radius);
+					_renderer.materials[i].SetFloat("_DissolveMaskHeight", height);
 					break;
 
 				case 2:
-					materials[i].SetVector("_DissolveMask2Position", position);
-					materials[i].SetVector("_DissolveMask2Normal", normal);
-					materials[i].SetFloat("_DissolveMask2Radius", radius);
-					materials[i].SetFloat("_DissolveMask2Height", height);
+					_renderer.materials[i].SetVector("_DissolveMask2Position", position);
+					_renderer.materials[i].SetVector("_DissolveMask2Normal", normal);
+					_renderer.materials[i].SetFloat("_DissolveMask2Radius", radius);
+					_renderer.materials[i].SetFloat("_DissolveMask2Height", height);
 					break;
 
 				case 3:
-					materials[i].SetVector("_DissolveMask3Position", position);
-					materials[i].SetVector("_DissolveMask3Normal", normal);
-					materials[i].SetFloat("_DissolveMask3Radius", radius);
-					materials[i].SetFloat("_DissolveMask3Height", height);
+					_renderer.materials[i].SetVector("_DissolveMask3Position", position);
+					_renderer.materials[i].SetVector("_DissolveMask3Normal", normal);
+					_renderer.materials[i].SetFloat("_DissolveMask3Radius", radius);
+					_renderer.materials[i].SetFloat("_DissolveMask3Height", height);
 					break;
 
 				case 4:
-					materials[i].SetVector("_DissolveMask4Position", position);
-					materials[i].SetVector("_DissolveMask4Normal", normal);
-					materials[i].SetFloat("_DissolveMask4Radius", radius);
-					materials[i].SetFloat("_DissolveMask4Height", height);
+					_renderer.materials[i].SetVector("_DissolveMask4Position", position);
+					_renderer.materials[i].SetVector("_DissolveMask4Normal", normal);
+					_renderer.materials[i].SetFloat("_DissolveMask4Radius", radius);
+					_renderer.materials[i].SetFloat("_DissolveMask4Height", height);
 					break;
 			}
 		}
@@ -109,57 +127,49 @@ public class DissolveBeam : MonoBehaviour
 
 	public void UpdateMaskKeyword()
 	{
-		if (materials != null)
+		for (int i = 0; i < _renderer.materials.Length; i++)
 		{
-			for (int i = 0; i < materials.Count; i++)
-			{
-				if (materials[i] == null)
-					continue;
+			if (_renderer.materials[i] == null)
+				continue;
 
-				//Enable proper keyword only
-				materials[i].DisableKeyword("_DISSOLVEMASK_XYZ_AXIS");
-				materials[i].DisableKeyword("_DISSOLVEMASK_PLANE");
-				materials[i].DisableKeyword("_DISSOLVEMASK_SPHERE");
-				materials[i].DisableKeyword("_DISSOLVEMASK_BOX");
-				materials[i].DisableKeyword("_DISSOLVEMASK_CONE");
+			//Enable proper keyword only
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASK_XYZ_AXIS");
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASK_PLANE");
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASK_SPHERE");
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASK_BOX");
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASK_CONE");
 
+			_renderer.materials[i].EnableKeyword("_DISSOLVEMASK_CYLINDER");
 
-				materials[i].EnableKeyword("_DISSOLVEMASK_CYLINDER");
-
-				//For material editor to select proper name inside dropdown
-				materials[i].SetFloat("_DissolveMask", 5);
-			}
+			//For material editor to select proper name inside dropdown
+			_renderer.materials[i].SetFloat("_DissolveMask", 5);
 		}
 	}
 
 	public void UpdateMaskCountKeyword(int count) //TODO: make this take zero as valid arg
 	{
-		if (materials != null)
+		for (int i = 0; i < _renderer.materials.Length; i++)
 		{
-			for (int i = 0; i < materials.Count; i++)
+			if (_renderer.materials[i] == null)
+				continue;
+
+			//Enable proper keyword only
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASKCOUNT_FOUR");
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASKCOUNT_THREE");
+			_renderer.materials[i].DisableKeyword("_DISSOLVEMASKCOUNT_TWO");
+
+			switch (count)
 			{
-				if (materials[i] == null)
-					continue;
-
-				//Enable proper keyword only
-				materials[i].DisableKeyword("_DISSOLVEMASKCOUNT_FOUR");
-				materials[i].DisableKeyword("_DISSOLVEMASKCOUNT_THREE");
-				materials[i].DisableKeyword("_DISSOLVEMASKCOUNT_TWO");
-
-				switch (count)
-				{
-					case 1: break;
-					case 2: materials[i].EnableKeyword("_DISSOLVEMASKCOUNT_TWO"); break;
-					case 3: materials[i].EnableKeyword("_DISSOLVEMASKCOUNT_THREE"); break;
-					case 4: materials[i].EnableKeyword("_DISSOLVEMASKCOUNT_FOUR"); break;
-				}
-
-				//For material editor to select proper name inside dropdown
-				materials[i].SetFloat("_DissolveMaskCount", count - 1);
+				case 1: break;
+				case 2: _renderer.materials[i].EnableKeyword("_DISSOLVEMASKCOUNT_TWO"); break;
+				case 3: _renderer.materials[i].EnableKeyword("_DISSOLVEMASKCOUNT_THREE"); break;
+				case 4: _renderer.materials[i].EnableKeyword("_DISSOLVEMASKCOUNT_FOUR"); break;
 			}
+
+			//For material editor to select proper name inside dropdown
+			_renderer.materials[i].SetFloat("_DissolveMaskCount", count - 1);
 		}
 	}
-
 }
 
 [System.Serializable]

@@ -29,7 +29,7 @@
 		//Mask
 		[HideInInspector][KeywordEnum(None, XYZ Axis, Plane, Sphere, Box, Cylinder, Cone)]  _DissolveMask("Mak", Float) = 0
 		[HideInInspector][Enum(X,0,Y,1,Z,2)]                                                _DissolveMaskAxis("Axis", Float) = 0
-		[HideInInspector][Enum(World,0,Local,1)]                                            _DissolveMaskSpace("Space", Float) = 1
+		/*[HideInInspector]*/[Enum(World,0,Local,1)]                                            _DissolveMaskSpace("Space", Float) = 1
 		[HideInInspector]                                                                   _DissolveMaskOffset("Offset", Float) = 0
 		[HideInInspector]                                                                   _DissolveMaskInvert("Invert", Float) = 1
 		[HideInInspector][KeywordEnum(One, Two, Three, Four)]                               _DissolveMaskCount("Count", Float) = 0
