@@ -80,6 +80,7 @@ public class MaterialManager : Manager
 		}
 	}
 
+	//Set thing like texture, edge width, & LocalSpace
 	void UpdateShaderData(Material material)
 	{
 		Debug.Assert(material != null);

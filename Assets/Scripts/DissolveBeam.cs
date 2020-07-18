@@ -22,8 +22,8 @@ public class DissolveBeam : MonoBehaviour
 	void Start()
 	{
 		_renderer = GetComponent<Renderer>();
-		UpdateMaskKeyword();
-		UpdateMaskCountKeyword(1); //TODO: make this take zero as valid arg
+		//UpdateMaskShape();
+		//UpdateMaskCount(1); //TODO: make this take zero as valid arg
 	}
 
 	private void SetDissolveMaterial()
@@ -68,13 +68,14 @@ public class DissolveBeam : MonoBehaviour
 
 		for (int i = 0; i < cylinders.Count; i++)
 		{
-			UpdateShaderData(i + 1, cylinders[i]);
+			UpdateMaskPosition(i + 1, cylinders[i]);
 		}
 
-		UpdateMaskCountKeyword(cylinders.Count);
+		UpdateMaskShape();
+		UpdateMaskCount(cylinders.Count);
 	}
 
-	void UpdateShaderData(int maskID, CylinderParameters cylinder)
+	void UpdateMaskPosition(int maskID, CylinderParameters cylinder)
 	{
 		Debug.Assert(cylinder != null, "DissolveBeam.UpdateShaderData() got null cylinder");
 
@@ -127,7 +128,7 @@ public class DissolveBeam : MonoBehaviour
 
 	}
 
-	public void UpdateMaskKeyword()
+	public void UpdateMaskShape()
 	{
 		for (int i = 0; i < _renderer.materials.Length; i++)
 		{
@@ -148,7 +149,7 @@ public class DissolveBeam : MonoBehaviour
 		}
 	}
 
-	public void UpdateMaskCountKeyword(int count) //TODO: make this take zero as valid arg
+	public void UpdateMaskCount(int count) //If this takes 0, it shouldn't be a dissolve obj anymore
 	{
 		for (int i = 0; i < _renderer.materials.Length; i++)
 		{
