@@ -8,23 +8,30 @@ public class MaterialManager : Manager
 	public enum SHAPE { Solid, Smooth, Smooth_Squared }
 
 	public Shader dissolveShader;
-	
+
+	[Header("General Settings")]
+	public bool LocalSpace = true;
+
 	[Header("Dissolve Settings")]
 	[Space(10)]
-	public float width = 0.25f;
 	public SHAPE shape;
-	public Color color = Color.green;
 	public float intensity;
 
 	[Space(10)]
-	public Texture texture;
 	public bool reverse;
+	//public Texture texture;
 	[Range(-1f, 1f)]
 	public float alphaOffset;
 	public float phaseOffset;
 	[Range(1, 10)]
 	public float blur;
 	public bool isDynamic;
+
+	[Header("Edge Settings")]
+	[Space(10)]
+	public Color color = Color.green;
+	public float width = 0.25f;
+	public Texture edgeTexture;
 
 	[Space(10)]
 	public float GIMultyplier;
@@ -34,15 +41,15 @@ public class MaterialManager : Manager
 
 	public Material GetDissolveMaterial(Material mat)
 	{
-		//if (_lookupDissolveShader.ContainsKey(mat))
-		//{
-		//	return _lookupDissolveShader[mat];
-		//}
+		if (_lookupDissolveShader.ContainsKey(mat))
+		{
+			return _lookupDissolveShader[mat];
+		}
 		/*else if(_lookupStandardShader.ContainsKey(mat))
 		{
 			return mat; //Looks like it's already a dissolve mat
 		}*/
-		//else
+		else
 		{
 			Material dissolveMat = new Material(mat);
 			dissolveMat.name = mat.name + " (dissolve)";
@@ -77,12 +84,14 @@ public class MaterialManager : Manager
 	{
 		Debug.Assert(material != null);
 
+		material.SetFloat("_DissolveMaskSpace", LocalSpace ? 1 : 0);
+
 		material.SetFloat("_DissolveEdgeWidth", width);
 		material.SetFloat("_DissolveEdgeShape", (int)shape);
 		material.SetColor("_DissolveEdgeColor", color);
 		material.SetFloat("_DissolveEdgeColorIntensity", intensity);
 
-		material.SetTexture("_DissolveEdgeTexture", texture);
+		material.SetTexture("_DissolveEdgeTexture", edgeTexture);
 		material.SetFloat("_DissolveEdgeTextureReverse", reverse ? 1 : 0);
 		material.SetFloat("_DissolveEdgeTextureMipmap", blur);
 		material.SetFloat("_DissolveEdgeTextureAlphaOffset", alphaOffset);
