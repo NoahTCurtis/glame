@@ -11,6 +11,7 @@ public class MaterialManager : Manager
 
 	[Header("General Settings")]
 	public bool LocalSpace = true;
+	public bool Invert = false;
 
 	[Header("Dissolve Settings")]
 	[Space(10)]
@@ -86,6 +87,7 @@ public class MaterialManager : Manager
 		Debug.Assert(material != null);
 
 		material.SetFloat("_DissolveMaskSpace", LocalSpace ? 1 : 0);
+		material.SetFloat("_DissolveMaskInvert", Invert ? 1 : -1);
 
 		material.SetFloat("_DissolveEdgeWidth", width);
 		material.SetFloat("_DissolveEdgeShape", (int)shape);

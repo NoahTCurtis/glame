@@ -17,7 +17,6 @@ public class DissolveBeam : MonoBehaviour
 	private List<CylinderParameters> cylinders = new List<CylinderParameters>();
 
 	private bool invert = false;
-	private bool local = false;
 
 	void Start()
 	{
@@ -61,10 +60,17 @@ public class DissolveBeam : MonoBehaviour
 		cylinders.Add(cp);
 
 		float beamLength = 999.9f;
-		cp.position = beam.ray.origin;// + beam.ray.direction * (beamLength / 2.0f);
+		cp.position = beam.ray.origin;
 		cp.normal = beam.ray.direction;
 		cp.radius = beam.radius;
 		cp.height = beamLength;
+
+		//TODO: localize by default and skip this check
+		if(Game.Manager<MaterialManager>().LocalSpace)
+		{
+			cp.position = transform.InverseTransformPoint(cp.position);
+			cp.normal = transform.InverseTransformDirection(cp.normal);
+		}
 
 		for (int i = 0; i < cylinders.Count; i++)
 		{
@@ -90,9 +96,6 @@ public class DissolveBeam : MonoBehaviour
 			//Debug.Log($"DissolveBeam.Addbeam(): Updating material {_renderer.materials[i].name}. (Mask ID {maskID})");
 
 			Debug.Assert(_renderer.materials[i] != null, "DissolveBeam tried to update a null material");
-
-			_renderer.materials[i].SetFloat("_DissolveMaskSpace", local ? 1 : 0);
-			_renderer.materials[i].SetFloat("_DissolveMaskInvert", invert ? 1 : -1);
 
 			switch (maskID)
 			{
