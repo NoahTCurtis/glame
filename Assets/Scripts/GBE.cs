@@ -32,6 +32,13 @@ public class GBE : MonoBehaviour
 		public int targetsBrokenSoFar = 0;
 	}
 
+	[Header("Shot Pipeline")]
+	public bool UseAudio = true;
+	public bool UseShaderHoles = true;
+	public bool UseBreakables = true;
+	public bool UseRubblePhysics = true;
+	public bool UseBeamAnimation = true;
+	public bool UseChargeRequirement = true; //cheatcode
 
 	#region GameObjectReferences
 	[Header("Rail Pieces")]
@@ -101,7 +108,6 @@ public class GBE : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	bool JUST_SHOOT_ALREADY = false; //cheatcode lol
 	void Update()
 	{
 		//find charge level
@@ -124,7 +130,7 @@ public class GBE : MonoBehaviour
 		GunShake01(openness01);
 
 		//shoot, if possible
-		if(Input.GetMouseButtonDown(0) && !ShotInProgress && (charge > 1 || JUST_SHOOT_ALREADY))
+		if(Input.GetMouseButtonDown(0) && !ShotInProgress && (charge > 1 || !UseChargeRequirement))
 		{
 			Shoot();
 		}
@@ -197,9 +203,13 @@ public class GBE : MonoBehaviour
 		StartCoroutine(breakBeamTargets);
 
 		//animation
-		StartCoroutine(EmitBeam(_beam));
+		StartCoroutine(AnimateBeam(_beam));
 
 		charge = 0;
+
+		//sound
+		if(UseAudio)
+			_audioSource.Play();
 	}
 
 	void CollectBeamTargets(BeamData beam)
@@ -220,7 +230,7 @@ public class GBE : MonoBehaviour
 
 			//make the piece appear broken via shaders
 			var dissolveBeam = hit.collider.GetComponent<DissolveBeam>();
-			if (dissolveBeam != null)
+			if (dissolveBeam != null && UseShaderHoles)
 			{
 				dissolveBeam.AddBeam(beam);
 				beam.dissolveBeams.Add(dissolveBeam);
@@ -233,30 +243,8 @@ public class GBE : MonoBehaviour
 		_beam = null;
 		yield return null;
 	}
-
-	/*
-	private IEnumerator EmitBeam(BeamData beam, IEnumerator next = null)
-	{
-		float length = 10.0f;
-		while (beam.targetsBrokenSoFar < beam.targets.Count)
-		{
-			float t = (float)beam.targetsBrokenSoFar / (float)beam.targets.Count;
-			float diameter = beam.radius * 2.0f * (1.0f - t);
-			Beam.localPosition = new Vector3(length, 0, 0);
-			Beam.localScale = new Vector3(diameter, length, diameter);
-			yield return null;
-		}
-
-		//reset for next time
-		Beam.transform.localScale = Vector3.zero;
-		Beam.transform.localPosition = Vector3.zero;
-
-		if (next != null) StartCoroutine(next);
-	}
-
-	/*/
-
-	private IEnumerator EmitBeam(BeamData beam, IEnumerator next = null)
+	
+	private IEnumerator AnimateBeam(BeamData beam, IEnumerator next = null)
 	{
 		float startTime = Time.time;
 		float endTime = Time.time + 0.25f;
@@ -266,16 +254,24 @@ public class GBE : MonoBehaviour
 		float t = 0;
 		while (t < 1)
 		{
-			float timeT = Mathf.InverseLerp(startTime, endTime, Time.time);
-			float breakT = 1;
-			if(beam != null)
-				breakT = (float)beam.targetsBrokenSoFar / (float)beam.targets.Count;
-			t = Mathf.Min(timeT, breakT);
-			//Debug.Log(t + " (" + beam?.targetsBrokenSoFar + "/" + beam?.targets.Count + ") [time" + timeT + " / break" + breakT + "]");
+			if(UseBeamAnimation)
+			{
+				float timeT = Mathf.InverseLerp(startTime, endTime, Time.time);
+				float breakT = 1;
+				if(beam != null)
+					breakT = (float)beam.targetsBrokenSoFar / (float)beam.targets.Count;
+				t = Mathf.Min(timeT, breakT);
+				//Debug.Log(t + " (" + beam?.targetsBrokenSoFar + "/" + beam?.targets.Count + ") [time" + timeT + " / break" + breakT + "]");
 
-			float diameter = startRadius * 2.0f * (1.0f - t);
-			Beam.localPosition = new Vector3(length, 0, 0);
-			Beam.localScale = new Vector3(diameter, length, diameter);
+				float diameter = startRadius * 2.0f * (1.0f - t);
+				Beam.localPosition = new Vector3(length, 0, 0);
+				Beam.localScale = new Vector3(diameter, length, diameter);
+			}
+			else
+			{
+				Beam.transform.localScale = Vector3.zero;
+				Beam.transform.localPosition = Vector3.zero;
+			}
 			yield return null;
 		}
 
@@ -285,7 +281,6 @@ public class GBE : MonoBehaviour
 
 		if (next != null) StartCoroutine(next);
 	}
-	//*/
 
 	IEnumerator BreakBeamTargets(BeamData beam, IEnumerator next = null)
 	{
@@ -293,7 +288,9 @@ public class GBE : MonoBehaviour
 		int brokenOnThisFrame = 0;
 		foreach(var breaker in beam.targets)
 		{
-			breaker.Break(beam);
+			if(UseBreakables)
+				breaker.Break(beam);
+
 			brokenOnThisFrame += 1;
 			beam.targetsBrokenSoFar += 1;
 
@@ -312,7 +309,7 @@ public class GBE : MonoBehaviour
 		foreach(var debris in beam.newDebrisPieces)
 		{
 			Rigidbody rb = debris.GetComponent<Rigidbody>();
-			if (rb != null)
+			if (rb != null && UseRubblePhysics)
 				rb.isKinematic = false;
 		}
 
