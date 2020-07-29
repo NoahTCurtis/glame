@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 16bc8a9d5451ca44d8f70575adbece3a, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 2039a0ad0a9d05549928b70362f54902, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -1603,7 +1603,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 17febae787041b743a52825c63a0e26e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4222,17 +4222,29 @@ MonoBehaviour:
   dissolveShader: {fileID: 4800000, guid: 949331d3c7ab6af429ad82ea6f794fc0, type: 3}
   LocalSpace: 1
   Invert: 0
-  shape: 0
-  intensity: 1
-  reverse: 0
-  alphaOffset: 0
-  phaseOffset: 0
-  blur: 1
-  isDynamic: 0
-  color: {r: 1, g: 0, b: 0, a: 1}
-  width: 0.25
-  edgeTexture: {fileID: 0}
-  GIMultyplier: 0
+  COSource: 1
+  COMapping: 0
+  CONoise: 0
+  COTexture: {fileID: 0}
+  COTiling: {x: 1, y: 1}
+  COOffset: {x: 0, y: 0}
+  COScroll: {x: 0, y: 0}
+  CO_UVSet: 0
+  EdgeWidth: 0.25
+  EdgeShape: 1
+  EdgeColor: {r: 1, g: 0, b: 0, a: 1}
+  EdgeIntensity: 5
+  EdgeTexture: {fileID: 0}
+  EdgeTexReverse: 0
+  EdgeEmission: 1
+  EdgeAlphaOffset: 0
+  EdgePhaseOffset: 0
+  EdgeBlur: 1
+  EdgeIsDynamic: 0
+  EdgeGIMultyplier: 1
+  UV_NoiseStrength: 0
+  UVStrength: 0
+  GlobalControl: 0
 --- !u!1 &1897010612
 GameObject:
   m_ObjectHideFlags: 0
@@ -4746,17 +4758,17 @@ PrefabInstance:
     - target: {fileID: 2255469466596353819, guid: ed5856b2e38673249a9c77f5a621b315,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.3
+      value: -6.13
       objectReference: {fileID: 0}
     - target: {fileID: 2255469466596353819, guid: ed5856b2e38673249a9c77f5a621b315,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.353
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 2255469466596353819, guid: ed5856b2e38673249a9c77f5a621b315,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.8
+      value: -6.95
       objectReference: {fileID: 0}
     - target: {fileID: 2255469466596353819, guid: ed5856b2e38673249a9c77f5a621b315,
         type: 3}
@@ -4808,6 +4820,36 @@ PrefabInstance:
       propertyPath: SkyboxRoot
       value: 
       objectReference: {fileID: 1853774514}
+    - target: {fileID: 5545037571503482027, guid: ed5856b2e38673249a9c77f5a621b315,
+        type: 3}
+      propertyPath: UseShaderHoles
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5545037571503482027, guid: ed5856b2e38673249a9c77f5a621b315,
+        type: 3}
+      propertyPath: UseAudio
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5545037571503482027, guid: ed5856b2e38673249a9c77f5a621b315,
+        type: 3}
+      propertyPath: UseBreakables
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5545037571503482027, guid: ed5856b2e38673249a9c77f5a621b315,
+        type: 3}
+      propertyPath: UseRubblePhysics
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5545037571503482027, guid: ed5856b2e38673249a9c77f5a621b315,
+        type: 3}
+      propertyPath: UseChargeRequirement
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5545037571503482027, guid: ed5856b2e38673249a9c77f5a621b315,
+        type: 3}
+      propertyPath: UseBeamAnimation
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed5856b2e38673249a9c77f5a621b315, type: 3}
 --- !u!33 &4609599653909332812

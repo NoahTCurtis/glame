@@ -18,6 +18,8 @@ public class DissolveBeam : MonoBehaviour
 
 	private bool invert = false;
 
+	private float myScale { get => (transform.localScale.x + transform.localScale.y + transform.localScale.z) / 3.0f; }
+
 	void Start()
 	{
 		_renderer = GetComponent<Renderer>();
@@ -29,7 +31,7 @@ public class DissolveBeam : MonoBehaviour
 	{
 		var renderer = GetComponent<Renderer>();
 
-		var newMat = Game.Manager<MaterialManager>().GetDissolveMaterial(renderer.material);
+		var newMat = Game.Manager<MaterialManager>().GetDissolveMaterial(renderer.material, transform);
 		Debug.Assert(renderer.material != newMat);
 		renderer.material = newMat;
 	}
@@ -60,9 +62,10 @@ public class DissolveBeam : MonoBehaviour
 		cylinders.Add(cp);
 
 		float beamLength = 999.9f;
+
 		cp.position = beam.ray.origin;
 		cp.normal = beam.ray.direction;
-		cp.radius = beam.radius;
+		cp.radius = beam.radius / myScale;
 		cp.height = beamLength;
 
 		//TODO: localize by default and skip this check
@@ -89,7 +92,6 @@ public class DissolveBeam : MonoBehaviour
 		Vector3 normal = cylinder.normal;
 		float radius = cylinder.radius;
 		float height = cylinder.height;
-
 		
 		for (int i = 0; i < _renderer.materials.Length; i++)
 		{

@@ -4,43 +4,57 @@ using UnityEngine;
 
 public class MaterialManager : Manager
 {
-	public enum TEXTURE_TYPE { None, Gradient, MainMap, Custom }
+	public enum CUTOUT_SOURCE { MainMapAlpha, CustomMap, TwoCustomMaps, ThreeCustomMaps }
+	public enum MAPPING { Normal, Triplanar, Screenspace }
+	public enum UV_SET { UV0, UV1 }
 	public enum SHAPE { Solid, Smooth, Smooth_Squared }
+	public enum TEXTURE_TYPE { None, Gradient, MainMap, Custom }
+	public enum NOISE_STRENGTH { CutoutSource, MainMapAlpha }
+	public enum GLOBAL_CONTROL { None, MaskOnly, MaskAndEdge, All }
 
 	public Shader dissolveShader;
 
-	[Header("General Settings")]
+	[Header("General")]
 	public bool LocalSpace = true;
 	public bool Invert = false;
 
-	[Header("Dissolve Settings")]
-	[Space(10)]
-	public SHAPE shape;
-	public float intensity;
+	[Header("Cutout")]
+	public CUTOUT_SOURCE COSource;
+	public MAPPING COMapping;
+	public float CONoise;
+	public Texture COTexture;
+	public Vector2 COTiling;
+	public Vector2 COOffset;
+	public Vector2 COScroll;
+	public UV_SET CO_UVSet;
 
-	[Space(10)]
-	public bool reverse;
-	//public Texture texture;
-	[Range(-1f, 1f)]
-	public float alphaOffset;
-	public float phaseOffset;
-	[Range(1, 10)]
-	public float blur;
-	public bool isDynamic;
+	[Header("Edge")]
+	public float EdgeWidth = 0.25f;
+	public SHAPE EdgeShape;
+	public Color EdgeColor = Color.red;
+	public float EdgeIntensity;
+	public Texture EdgeTexture;
+	public bool EdgeTexReverse = false;
+	public bool EdgeEmission;
 
-	[Header("Edge Settings")]
-	[Space(10)]
-	public Color color = Color.green;
-	public float width = 0.25f;
-	public Texture edgeTexture;
+	[Header("Edge Misc")]
+	[Range(-1f, 1f)] public float EdgeAlphaOffset;
+	public float EdgePhaseOffset;
+	[Range(1, 10)] public float EdgeBlur;
+	public bool EdgeIsDynamic;
+	public float EdgeGIMultyplier;
 
-	[Space(10)]
-	public float GIMultyplier;
+	[Header("UV Distortion")]
+	public NOISE_STRENGTH UV_NoiseStrength;
+	public float UVStrength;
+
+	[Header("Global")]
+	public GLOBAL_CONTROL GlobalControl;
 
 	private Dictionary<Material, Material> _lookupDissolveShader = new Dictionary<Material, Material>();
 	private Dictionary<Material, Material> _lookupStandardShader = new Dictionary<Material, Material>();
 
-	public Material GetDissolveMaterial(Material mat)
+	public Material GetDissolveMaterial(Material mat, Transform trans)
 	{
 		if (_lookupDissolveShader.ContainsKey(mat))
 		{
@@ -58,7 +72,7 @@ public class MaterialManager : Manager
 
 			dissolveMat.shader = dissolveShader;
 			UpdateTextureTypeKeyword(dissolveMat, TEXTURE_TYPE.Custom);
-			UpdateShaderData(dissolveMat);
+			UpdateShaderData(dissolveMat, trans);
 
 			return dissolveMat;
 		}
@@ -82,26 +96,50 @@ public class MaterialManager : Manager
 	}
 
 	//Set thing like texture, edge width, & LocalSpace
-	void UpdateShaderData(Material material)
+	void UpdateShaderData(Material material, Transform trans)
 	{
 		Debug.Assert(material != null);
 
+		float scale = (trans.localScale.x + trans.localScale.y + trans.localScale.z) / 3.0f;
+
+		//Mask Shape
+		material.DisableKeyword("_DISSOLVEMASK_XYZ_AXIS");
+		material.DisableKeyword("_DISSOLVEMASK_PLANE");
+		material.DisableKeyword("_DISSOLVEMASK_SPHERE");
+		material.DisableKeyword("_DISSOLVEMASK_BOX");
+		material.DisableKeyword("_DISSOLVEMASK_CONE");
+		material.EnableKeyword("_DISSOLVEMASK_CYLINDER");
+
+		//General Mask params
 		material.SetFloat("_DissolveMaskSpace", LocalSpace ? 1 : 0);
 		material.SetFloat("_DissolveMaskInvert", Invert ? 1 : -1);
 
-		material.SetFloat("_DissolveEdgeWidth", width);
-		material.SetFloat("_DissolveEdgeShape", (int)shape);
-		material.SetColor("_DissolveEdgeColor", color);
-		material.SetFloat("_DissolveEdgeColorIntensity", intensity);
+		//Cutout
+		material.SetFloat("_DissolveAlphaSource", (float)COSource); //CUTOUT_SOURCE COSource;
+		material.SetFloat("_DissolveMappingType", (float)COMapping); //MAPPING COMapping;
+		material.SetFloat("_DissolveNoiseStrength", CONoise); //float CONoise;
+		material.SetTexture("_DissolveMap1", COTexture); //Texture COTexture;
+		///material.SetVector("", ); //Vector2 COTiling;
+		///material.SetVector("", ); //Vector2 COOffset;
+		///material.SetVector("", ); //Vector2 COScroll;
+		///material.SetFloat("", ); //UV_SET CO_UVSet;
 
-		material.SetTexture("_DissolveEdgeTexture", edgeTexture);
-		material.SetFloat("_DissolveEdgeTextureReverse", reverse ? 1 : 0);
-		material.SetFloat("_DissolveEdgeTextureMipmap", blur);
-		material.SetFloat("_DissolveEdgeTextureAlphaOffset", alphaOffset);
-		material.SetFloat("_DissolveEdgeTexturePhaseOffset", phaseOffset);
-		material.SetFloat("_DissolveEdgeTextureIsDynamic", isDynamic ? 1 : 0);
+		//Edge
+		material.SetFloat("_DissolveEdgeWidth", EdgeWidth / scale);
+		material.SetFloat("_DissolveEdgeShape", (int)EdgeShape);
+		material.SetColor("_DissolveEdgeColor", EdgeColor);
+		material.SetFloat("_DissolveEdgeColorIntensity", EdgeIntensity);
+		material.SetTexture("_DissolveEdgeTexture", EdgeTexture);
+		///material.SetInt("", ); //bool EdgeEmission
+		material.SetFloat("_DissolveEdgeTextureReverse", EdgeTexReverse ? 1 : 0);
 
-		material.SetFloat("_DissolveGIMultiplier", GIMultyplier > 0 ? GIMultyplier : 0);
+		//Edge Misc
+		material.SetFloat("_DissolveEdgeTextureMipmap", EdgeBlur);
+		material.SetFloat("_DissolveEdgeTextureAlphaOffset", EdgeAlphaOffset);
+		material.SetFloat("_DissolveEdgeTexturePhaseOffset", EdgePhaseOffset);
+		material.SetFloat("_DissolveEdgeTextureIsDynamic", EdgeIsDynamic ? 1 : 0);
+
+		material.SetFloat("_DissolveGIMultiplier", EdgeGIMultyplier > 0 ? EdgeGIMultyplier : 0);
 	}
 
 	public void UpdateTextureTypeKeyword(Material material, TEXTURE_TYPE textureType)

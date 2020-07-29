@@ -135,7 +135,7 @@ Material:
     - _DissolveMaskCount: 0
     - _DissolveMaskInvert: -1
     - _DissolveMaskOffset: 0
-    - _DissolveMaskRadius: 0.48
+    - _DissolveMaskRadius: 0.236715
     - _DissolveMaskSpace: 0
     - _DissolveNoiseStrength: 0.3
     - _DissolveSourceAlphaTexturesBlend: 0
@@ -162,8 +162,8 @@ Material:
     - _DissolveMap1_Scroll: {r: 0, g: 0, b: 0, a: 0}
     - _DissolveMap2_Scroll: {r: 0, g: 0, b: 0, a: 0}
     - _DissolveMap3_Scroll: {r: 0, g: 0, b: 0, a: 0}
-    - _DissolveMaskNormal: {r: 0, g: 0, b: 1, a: 0}
-    - _DissolveMaskPosition: {r: 0, g: 0, b: 0, a: 0}
+    - _DissolveMaskNormal: {r: 0.008264244, g: 0.07419494, b: -0.9972096, a: 0}
+    - _DissolveMaskPosition: {r: 2.5279806, g: -0.107907414, b: 1.4503188, a: 0}
     - _Dissolve_ObjectWorldPos: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _InkColor: {r: 0, g: 0, b: 0, a: 1}
